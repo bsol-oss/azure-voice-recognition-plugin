@@ -17,16 +17,16 @@ class AzureSpeechRecognition {
     _channel.setMethodCallHandler(_platformCallHandler);
   }
 
-  static String? _subKey;
+  static String? _authToken;
   static String? _region;
   static String _lang = "en-EN";
   static String _timeout = "1000";
 
   /// default intitializer for almost every type except for the intent recognizer.
   /// Default language -> English
-  AzureSpeechRecognition.initialize(String subKey, String region,
+  AzureSpeechRecognition.initialize(String authToken, String region,
       {String? lang, String? timeout}) {
-    _subKey = subKey;
+    _authToken = authToken;
     _region = region;
     if (lang != null) _lang = lang;
     if (timeout != null) {
@@ -110,10 +110,10 @@ class AzureSpeechRecognition {
 
   // Performs speech recognition until a silence is detected
   static void simpleVoiceRecognition() {
-    if ((_subKey != null && _region != null)) {
+    if ((_authToken != null && _region != null)) {
       _channel.invokeMethod('simpleVoice', {
         'language': _lang,
-        'subscriptionKey': _subKey,
+        'authorizationToken': _authToken,
         'region': _region,
         'timeout': _timeout
       });
@@ -127,10 +127,10 @@ class AzureSpeechRecognition {
     String? phonemeAlphabet,
     String? granularity,
     bool? enableMiscue, int? nBestPhonemeCount,}) {
-    if ((_subKey != null && _region != null)) {
+    if ((_authToken != null && _region != null)) {
       _channel.invokeMethod('simpleVoiceWithAssessment', {
         'language': _lang,
-        'subscriptionKey': _subKey,
+        'authorizationToken': _authToken,
         'region': _region,
         'timeout': _timeout,
         'granularity': granularity,
@@ -149,9 +149,9 @@ class AzureSpeechRecognition {
   /// When called a second time, it stops the previously started recognition
   /// It essentially toggles between "recording" and "not recording" states
   static void continuousRecording() {
-    if (_subKey != null && _region != null) {
+    if (_authToken != null && _region != null) {
       _channel.invokeMethod('continuousStream',
-          {'language': _lang, 'subscriptionKey': _subKey, 'region': _region});
+          {'language': _lang, 'authorizationToken': _authToken, 'region': _region});
     } else {
       throw "Error: SpeechRecognitionParameters not initialized correctly";
     }
@@ -164,10 +164,10 @@ class AzureSpeechRecognition {
     String? phonemeAlphabet,
     String? granularity,
     bool? enableMiscue, int? nBestPhonemeCount,}) {
-    if ((_subKey != null && _region != null)) {
+    if ((_authToken != null && _region != null)) {
       _channel.invokeMethod('continuousStreamWithAssessment', {
         'language': _lang,
-        'subscriptionKey': _subKey,
+        'authorizationToken': _authToken,
         'region': _region,
         'granularity': granularity,
         'enableMiscue': enableMiscue,

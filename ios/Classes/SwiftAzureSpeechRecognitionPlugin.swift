@@ -3,6 +3,7 @@ import UIKit
 import MicrosoftCognitiveServicesSpeech
 import AVFoundation
 
+
 @available(iOS 13.0, *)
 struct SimpleRecognitionTask {
     var task: Task<Void, Never>

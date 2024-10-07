@@ -7,7 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
-  await dotenv.load();
+  // await dotenv.load();
   runApp(MyApp());
 }
 

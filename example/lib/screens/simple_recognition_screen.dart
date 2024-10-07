@@ -13,7 +13,8 @@ class _SimpleRecognitionScreenState extends State<SimpleRecognitionScreen>
     with SingleTickerProviderStateMixin {
   String _centerText = 'Unknown';
   late AzureSpeechRecognition _speechAzure;
-  String subKey = dotenv.get("AZURE_KEY");
+  String authToken = '''
+<some-token>  ''';
   String region = "eastus";
   String lang = "en-US";
   String timeout = "2000";
@@ -22,7 +23,7 @@ class _SimpleRecognitionScreenState extends State<SimpleRecognitionScreen>
 
   void activateSpeechRecognizer() {
     // MANDATORY INITIALIZATION
-    AzureSpeechRecognition.initialize(subKey, region,
+    AzureSpeechRecognition.initialize(authToken, region,
         lang: lang, timeout: timeout);
 
     _speechAzure.setFinalTranscription((text) {
@@ -61,7 +62,7 @@ class _SimpleRecognitionScreenState extends State<SimpleRecognitionScreen>
     try {
       AzureSpeechRecognition
           .simpleVoiceRecognition(); //await platform.invokeMethod('azureVoice');
-      print("Started recognition with subKey: $subKey");
+      print("Started recognition with subKey: $authToken");
     } on Exception catch (e) {
       print("Failed to get text '$e'.");
     }

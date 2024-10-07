@@ -26,10 +26,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   azure_speech_recognition_null_safety: 9eddd6816b8063c99a3fea9f479024774621f8fd
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   MicrosoftCognitiveServicesSpeech-iOS: 0de20a8ebb6bbd87decaeaa9a707dd40830106a6
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
 
-PODFILE CHECKSUM: 98c89f99472519ff817847b3d71731d768a7c74c
+PODFILE CHECKSUM: aa9af445d1dca55a9a79485169040a812cb9c7e2
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2
