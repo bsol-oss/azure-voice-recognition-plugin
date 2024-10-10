@@ -28,7 +28,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let args = call.arguments as? Dictionary<String, Any>
-        let speechSubscriptionKey = args?["subscriptionKey"] as? String ?? ""
+        let speechSubscriptionKey = args?["authorizationToken"] as? String ?? ""
         let serviceRegion = args?["region"] as? String ?? ""
         let lang = args?["language"] as? String ?? ""
         let timeoutMs = args?["timeout"] as? String ?? ""
@@ -104,7 +104,8 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 try audioSession.setActive(true)
                 print("Setting custom audio session")
                 // Initialize speech recognizer and specify correct subscription key and service region
-                try speechConfig = SPXSpeechConfiguration(subscription: speechSubscriptionKey, region: serviceRegion)
+                try speechConfig = SPXSpeechConfiguration(authorizationToken: speechSubscriptionKey, region: serviceRegion)
+                
             } catch {
                 print("error \(error) happened")
                 speechConfig = nil
@@ -161,7 +162,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 try audioSession.setActive(true)
                 print("Setting custom audio session")
                 // Initialize speech recognizer and specify correct subscription key and service region
-                try speechConfig = SPXSpeechConfiguration(subscription: speechSubscriptionKey, region: serviceRegion)
+                try speechConfig = SPXSpeechConfiguration(authorizationToken: speechSubscriptionKey, region: serviceRegion)
                 try pronunciationAssessmentConfig = SPXPronunciationAssessmentConfiguration.init(
                     referenceText,
                     gradingSystem: SPXPronunciationAssessmentGradingSystem.hundredMark,
@@ -261,7 +262,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 print("An unexpected error occurred")
             }
             
-            let speechConfig = try! SPXSpeechConfiguration(subscription: speechSubscriptionKey, region: serviceRegion)
+            let speechConfig = try! SPXSpeechConfiguration(authorizationToken: speechSubscriptionKey, region: serviceRegion)
             
             speechConfig.speechRecognitionLanguage = lang
             
@@ -307,7 +308,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 try audioSession.setActive(true)
                 print("Setting custom audio session")
                 
-                let speechConfig = try SPXSpeechConfiguration(subscription: speechSubscriptionKey, region: serviceRegion)
+                let speechConfig = try SPXSpeechConfiguration(authorizationToken: speechSubscriptionKey, region: serviceRegion)
                 speechConfig.speechRecognitionLanguage = lang
                 
                 let pronunciationAssessmentConfig = try SPXPronunciationAssessmentConfiguration.init(
