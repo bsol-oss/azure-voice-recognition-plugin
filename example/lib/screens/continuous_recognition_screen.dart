@@ -18,7 +18,7 @@ class _ContinuousRecognitionScreenState extends State<ContinuousRecognitionScree
   void initState() {
     super.initState();
     final AzureSpeechRecognition _azureSpeechRecognition = AzureSpeechRecognition();
-    AzureSpeechRecognition.initialize('<some-token', 'eastasia', lang: 'en-US', timeout: '1500');
+    AzureSpeechRecognition.initialize('<some-toke>', 'eastasia', lang: 'en-US', timeout: '1500');
     _azureSpeechRecognition.setFinalTranscription((text) {
       if (text.isEmpty) return;
       dynamic messageWithTranslation = jsonDecode(text);
