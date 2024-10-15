@@ -1,15 +1,15 @@
+import 'dart:convert';
+
 import 'package:azure_speech_recognition_null_safety/azure_speech_recognition_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ContinuousRecognitionScreen extends StatefulWidget {
   @override
-  _ContinuousRecognitionScreenState createState() =>
-      _ContinuousRecognitionScreenState();
+  _ContinuousRecognitionScreenState createState() => _ContinuousRecognitionScreenState();
 }
 
-class _ContinuousRecognitionScreenState
-    extends State<ContinuousRecognitionScreen> {
+class _ContinuousRecognitionScreenState extends State<ContinuousRecognitionScreen> {
   bool _isMicOn = false;
   String _intermediateResult = '';
   String _recognizedText = '';
@@ -17,26 +17,20 @@ class _ContinuousRecognitionScreenState
   @override
   void initState() {
     super.initState();
-    final AzureSpeechRecognition _azureSpeechRecognition =
-        AzureSpeechRecognition();
-    AzureSpeechRecognition.initialize(
-        '<some-token>',
-        'eastus',
-        lang: 'en-US', timeout: '1500');
+    final AzureSpeechRecognition _azureSpeechRecognition = AzureSpeechRecognition();
+    AzureSpeechRecognition.initialize('<some-token', 'eastasia', lang: 'en-US', timeout: '1500');
     _azureSpeechRecognition.setFinalTranscription((text) {
       if (text.isEmpty) return;
+      dynamic messageWithTranslation = jsonDecode(text);
 
       setState(() {
-        _recognizedText += " $text";
+        _recognizedText += " ${messageWithTranslation['text']}";
         _intermediateResult = '';
       });
     });
-    _azureSpeechRecognition.onExceptionHandler(
-        (exception) => debugPrint("Speech recognition exception: $exception"));
-    _azureSpeechRecognition.setRecognitionStartedHandler(
-        () => debugPrint("Speech recognition has started."));
-    _azureSpeechRecognition.setRecognitionStoppedHandler(
-        () => debugPrint("Speech recognition has stopped."));
+    _azureSpeechRecognition.onExceptionHandler((exception) => debugPrint("Speech recognition exception: $exception"));
+    _azureSpeechRecognition.setRecognitionStartedHandler(() => debugPrint("Speech recognition has started."));
+    _azureSpeechRecognition.setRecognitionStoppedHandler(() => debugPrint("Speech recognition has stopped."));
     _azureSpeechRecognition.setRecognitionResultHandler((text) {
       setState(() {
         _intermediateResult = text;
