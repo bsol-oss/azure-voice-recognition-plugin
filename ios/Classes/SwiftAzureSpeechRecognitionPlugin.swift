@@ -278,7 +278,10 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 speechTranslationConfiguration: speechConfig, audioConfiguration: audioConfig)
             continousSpeechTranslationRecognizer!.addRecognizingEventHandler() {reco, evt in
                 print("intermediate recognition result: \(evt.result.text ?? "(no result)")")
-                self.azureChannel.invokeMethod("speech.onSpeech", arguments: evt.result.text)
+               
+                DispatchQueue.main.async {
+                    self.azureChannel.invokeMethod("speech.onSpeech", arguments: evt.result.text)
+                   }
             }
             continousSpeechTranslationRecognizer!.addRecognizedEventHandler({reco, evt in
                 let res = evt.result.text
@@ -293,7 +296,9 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                     
                     // Convert JSON data to a string (force unwrap since we assume it's valid)
                     let jsonString = String(data: jsonData, encoding: .utf8)!
-                    self.azureChannel.invokeMethod("speech.onFinalResponse", arguments: jsonString)
+                    DispatchQueue.main.async {
+                        self.azureChannel.invokeMethod("speech.onFinalResponse", arguments: jsonString)
+                       }
                 }catch{
                     print("Failed to serialize JSON: \(error.localizedDescription)")
                 }
@@ -302,7 +307,10 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
             })
             print("Listening...")
             try! continousSpeechTranslationRecognizer!.startContinuousRecognition()
-            self.azureChannel.invokeMethod("speech.onRecognitionStarted", arguments: nil)
+            DispatchQueue.main.async {
+                self.azureChannel.invokeMethod("speech.onRecognitionStarted", arguments: nil)
+               }
+            
             continousListeningStarted = true
         }
     }
