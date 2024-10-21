@@ -271,7 +271,20 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
             speechConfig.addTargetLanguage("en-US")
             speechConfig.addTargetLanguage("zh-CN")
             speechConfig.addTargetLanguage("zh-HK")
-            
+            speechConfig.addTargetLanguage("ar-SA")
+            speechConfig.addTargetLanguage("es-ES")
+            speechConfig.addTargetLanguage("ru-RU")
+            speechConfig.addTargetLanguage("th-TH")
+            speechConfig.addTargetLanguage("vi-VN")
+            speechConfig.addTargetLanguage("fil-PH")
+            speechConfig.addTargetLanguage("fr-FR")
+            speechConfig.addTargetLanguage("de-DE")
+            speechConfig.addTargetLanguage("ja-JP")
+            speechConfig.addTargetLanguage("ko-KR")
+            speechConfig.addTargetLanguage("id-ID")
+            speechConfig.addTargetLanguage("ms-MY")
+            speechConfig.addTargetLanguage("pt-PT")
+
             let audioConfig = SPXAudioConfiguration()
             
             continousSpeechTranslationRecognizer = try! SPXTranslationRecognizer(
