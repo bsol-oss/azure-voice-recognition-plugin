@@ -321,8 +321,15 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
 
             reco2.recognizing.addEventListener { _, speechRecognitionResultEventArgs ->
                 val s = speechRecognitionResultEventArgs.result.text
-                Log.i(logTag, "Intermediate result received: $s")
-                invokeMethod("speech.onSpeech", s)
+                val translations = speechRecognitionResultEventArgs.result.translations
+                val resultMap: Map<String, Any> = mapOf(
+                    "text" to s,
+                    "translations" to translations.mapValues { it.value } // Convert MutableMap to Map<String, String>
+                )
+                val jsonString = Gson().toJson(resultMap)
+                Log.i(logTag, "Intermediate result received: $jsonString")
+
+                invokeMethod("speech.onSpeech", jsonString)
             }
 
             reco2.recognized.addEventListener { _, speechRecognitionResultEventArgs ->
@@ -334,7 +341,7 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
                 )
                 val jsonString = Gson().toJson(resultMap)
                 Log.i(logTag, "Final result received: $jsonString")
-                invokeMethod("speech.onFinalResponse", "$jsonString")
+                invokeMethod("speech.onFinalResponse", jsonString)
             }
 
             val _task2 = reco2.startContinuousRecognitionAsync()

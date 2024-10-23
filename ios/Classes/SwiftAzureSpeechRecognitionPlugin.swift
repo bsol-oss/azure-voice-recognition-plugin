@@ -290,11 +290,24 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
             continousSpeechTranslationRecognizer = try! SPXTranslationRecognizer(
                 speechTranslationConfiguration: speechConfig, audioConfiguration: audioConfig)
             continousSpeechTranslationRecognizer!.addRecognizingEventHandler() {reco, evt in
-                print("intermediate recognition result: \(evt.result.text ?? "(no result)")")
-               
-                DispatchQueue.main.async {
-                    self.azureChannel.invokeMethod("speech.onSpeech", arguments: evt.result.text)
-                   }
+                let res = evt.result.text
+                print("intermediate result \(res!)")
+                let translations = evt.result.translations;
+                let resultMap: [String: Any] = [
+                    "text": res,
+                    "translations": translations
+                ]
+                do{
+                    let jsonData = try JSONSerialization.data(withJSONObject: resultMap, options: [])
+                    
+                    // Convert JSON data to a string (force unwrap since we assume it's valid)
+                    let jsonString = String(data: jsonData, encoding: .utf8)!
+                    DispatchQueue.main.async {
+                        self.azureChannel.invokeMethod("speech.onSpeech", arguments: jsonString)
+                       }
+                }catch{
+                    print("Failed to serialize JSON: \(error.localizedDescription)")
+                }
             }
             continousSpeechTranslationRecognizer!.addRecognizedEventHandler({reco, evt in
                 let res = evt.result.text
