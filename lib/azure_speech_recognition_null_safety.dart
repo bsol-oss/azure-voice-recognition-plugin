@@ -6,10 +6,10 @@ typedef void StringResultHandler(String text);
 
 class AzureSpeechRecognition {
   static const MethodChannel _channel =
-  const MethodChannel('azure_speech_recognition');
+      const MethodChannel('azure_speech_recognition');
 
   static final AzureSpeechRecognition _azureSpeechRecognition =
-  new AzureSpeechRecognition._internal();
+      new AzureSpeechRecognition._internal();
 
   factory AzureSpeechRecognition() => _azureSpeechRecognition;
 
@@ -19,7 +19,6 @@ class AzureSpeechRecognition {
 
   static String? _authToken;
   static String? _region;
-  static String _lang = "en-EN";
   static String _timeout = "1000";
 
   /// default intitializer for almost every type except for the intent recognizer.
@@ -28,7 +27,6 @@ class AzureSpeechRecognition {
       {String? lang, String? timeout}) {
     _authToken = authToken;
     _region = region;
-    if (lang != null) _lang = lang;
     if (timeout != null) {
       if (int.parse(timeout) >= 100 && int.parse(timeout) <= 5000) {
         _timeout = timeout;
@@ -109,10 +107,10 @@ class AzureSpeechRecognition {
       recognitionStoppedHandler = handler;
 
   // Performs speech recognition until a silence is detected
-  static void simpleVoiceRecognition() {
+  static void simpleVoiceRecognition(String detectedLanguage) {
     if ((_authToken != null && _region != null)) {
       _channel.invokeMethod('simpleVoice', {
-        'language': _lang,
+        'language': detectedLanguage,
         'authorizationToken': _authToken,
         'region': _region,
         'timeout': _timeout
@@ -123,13 +121,17 @@ class AzureSpeechRecognition {
   }
 
   /// Performs speech recognition until a silence is detected (with speech assessment)
-  static void simpleVoiceRecognitionWithAssessment({String? referenceText,
+  static void simpleVoiceRecognitionWithAssessment({
+    String? referenceText,
     String? phonemeAlphabet,
     String? granularity,
-    bool? enableMiscue, int? nBestPhonemeCount,}) {
+    bool? enableMiscue,
+    String? detectedLanguage,
+    int? nBestPhonemeCount,
+  }) {
     if ((_authToken != null && _region != null)) {
       _channel.invokeMethod('simpleVoiceWithAssessment', {
-        'language': _lang,
+        'language': detectedLanguage,
         'authorizationToken': _authToken,
         'region': _region,
         'timeout': _timeout,
@@ -144,14 +146,16 @@ class AzureSpeechRecognition {
     }
   }
 
-
   /// When called for the first time, starts performing continuous recognition
   /// When called a second time, it stops the previously started recognition
   /// It essentially toggles between "recording" and "not recording" states
-  static void continuousRecording() {
+  static void continuousRecording(String detectedLanguage) {
     if (_authToken != null && _region != null) {
-      _channel.invokeMethod('continuousStream',
-          {'language': _lang, 'authorizationToken': _authToken, 'region': _region});
+      _channel.invokeMethod('continuousStream', {
+        'language': detectedLanguage,
+        'authorizationToken': _authToken,
+        'region': _region
+      });
     } else {
       throw "Error: SpeechRecognitionParameters not initialized correctly";
     }
@@ -160,13 +164,17 @@ class AzureSpeechRecognition {
   /// When called for the first time, starts performing continuous recognition (with speech assessment)
   /// When called a second time, it stops the previously started recognition (with speech assessment)
   /// It essentially toggles between "recording" and "not recording" states
-  static void continuousRecordingWithAssessment({String? referenceText,
+  static void continuousRecordingWithAssessment({
+    String? referenceText,
     String? phonemeAlphabet,
     String? granularity,
-    bool? enableMiscue, int? nBestPhonemeCount,}) {
+    String? detectedLanguage,
+    bool? enableMiscue,
+    int? nBestPhonemeCount,
+  }) {
     if ((_authToken != null && _region != null)) {
       _channel.invokeMethod('continuousStreamWithAssessment', {
-        'language': _lang,
+        'language': detectedLanguage,
         'authorizationToken': _authToken,
         'region': _region,
         'granularity': granularity,
@@ -180,11 +188,11 @@ class AzureSpeechRecognition {
     }
   }
 
-
   /// When continuously recording, returns true, otherwise it returns false
   static Future<bool> isContinuousRecognitionOn() {
-    return _channel.invokeMethod<bool>('isContinuousRecognitionOn').then<bool>((
-        bool? value) => value ?? false);
+    return _channel
+        .invokeMethod<bool>('isContinuousRecognitionOn')
+        .then<bool>((bool? value) => value ?? false);
   }
 
   static Future<void> stopContinuousRecognition() async {

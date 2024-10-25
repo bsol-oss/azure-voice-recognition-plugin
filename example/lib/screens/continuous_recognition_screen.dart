@@ -61,7 +61,7 @@ class _ContinuousRecognitionScreenState
               setState(() {
                 _isMicOn = !_isMicOn;
               });
-              AzureSpeechRecognition.continuousRecording();
+              AzureSpeechRecognition.continuousRecording('ar-SA');
             },
             child: Container(
               width: 80,

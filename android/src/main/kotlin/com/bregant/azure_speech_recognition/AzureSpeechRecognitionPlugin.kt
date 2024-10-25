@@ -310,6 +310,7 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
                 SpeechTranslationConfig.fromAuthorizationToken(authorizationToken, serviceRegion)
 
             // Set the source language and target languages for translation
+            Log.i(logTag, "config.speechRecognitionLanguage: $lang")
             config.speechRecognitionLanguage = lang
             val toLanguages: List<String> = listOf("pt-PT","ms-MY","id-ID","ko-KR","ja-JP","de-DE","fr-FR","fil-PH","vi-VN","th-TH","ru-RU","es-ES","ar-SA","zh-HK", "zh-CN","en-US")
             toLanguages.forEach { targetLang ->

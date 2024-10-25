@@ -16,7 +16,7 @@ class _SimpleRecognitionScreenState extends State<SimpleRecognitionScreen>
   String authToken = '''
 <some-token>  ''';
   String region = "eastus";
-  String lang = "en-US";
+  String lang = "ar-SA";
   String timeout = "2000";
   bool isRecording = false;
   late AnimationController controller;
@@ -60,14 +60,14 @@ class _SimpleRecognitionScreenState extends State<SimpleRecognitionScreen>
 
   Future _recognizeVoice() async {
     try {
-      AzureSpeechRecognition
-          .simpleVoiceRecognition(); //await platform.invokeMethod('azureVoice');
+      AzureSpeechRecognition.simpleVoiceRecognition(
+          lang); //await platform.invokeMethod('azureVoice');
       print("Started recognition with subKey: $authToken");
     } on Exception catch (e) {
       print("Failed to get text '$e'.");
     }
   }
-  
+
   @override
   void dispose() {
     controller.dispose();
@@ -98,7 +98,9 @@ class _SimpleRecognitionScreenState extends State<SimpleRecognitionScreen>
                 },
               ),
             ),
-            SizedBox(height: 40,),
+            SizedBox(
+              height: 40,
+            ),
             Text('Recognized text : $_centerText\n'),
             FloatingActionButton(
               onPressed: !isRecording ? _recognizeVoice : null,
