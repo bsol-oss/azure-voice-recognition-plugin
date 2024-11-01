@@ -1,4 +1,4 @@
-group 'com.bregant.azure_speech_recognition'
+// group 'com.bregant.azure_speech_recognition'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -26,6 +26,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 33
+    namespace "com.bsoloss.azure_speech_plugin"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
