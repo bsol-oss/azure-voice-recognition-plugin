@@ -28,7 +28,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.bregant.azure_speech_recognition
+        package: com.bsoloss.azure_speech_plugin
         pluginClass: AzureSpeechRecognitionPlugin
       ios: 
         package: com.jjordanoc.azure_speech_recognition_null_safety

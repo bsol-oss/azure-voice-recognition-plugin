@@ -1,4 +1,4 @@
-// group 'com.bregant.azure_speech_recognition'
+// group 'com.bsoloss.azure_speech_plugin'
 version '1.0-SNAPSHOT'
 
 buildscript {

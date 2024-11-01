@@ -1,4 +1,4 @@
-package com.bregant.azure_speech_recognition
+package com.bsoloss.azure_speech_plugin
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;

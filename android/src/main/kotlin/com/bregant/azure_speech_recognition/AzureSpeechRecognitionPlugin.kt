@@ -1,4 +1,4 @@
-package com.bregant.azure_speech_recognition
+package com.bsoloss.azure_speech_plugin
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -11,7 +11,7 @@ import com.microsoft.cognitiveservices.speech.audio.AudioConfig
 import com.microsoft.cognitiveservices.speech.intent.LanguageUnderstandingModel
 import com.microsoft.cognitiveservices.speech.intent.IntentRecognitionResult
 import com.microsoft.cognitiveservices.speech.intent.IntentRecognizer
-import com.bregant.azure_speech_recognition.MicrophoneStream
+import com.bsoloss.azure_speech_plugin.MicrophoneStream
 import android.app.Activity
 
 import java.util.concurrent.ExecutorService
