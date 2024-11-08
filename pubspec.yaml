@@ -1,11 +1,12 @@
 name: azure_speech_recognition_null_safety
 description: azure_speech_recognition with sound null safety.
 version: 0.9.5
-homepage: https://github.com/jjordanoc/azure_speech_recognition_null_safety
+homepage: https://github.com/bsol-oss/azure_speech_recognition_null_safety
 
 environment:
-  sdk: '>=2.18.0 <4.0.0'
-  flutter: ">=1.10.0"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
  
 
 dependencies:
@@ -28,10 +29,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.bsoloss.azure_speech_plugin
+        package: com.bsoloss.azure_speech_recognition_null_safety
         pluginClass: AzureSpeechRecognitionPlugin
       ios: 
-        package: com.jjordanoc.azure_speech_recognition_null_safety
+        package: com.bsoloss.azure_speech_recognition_null_safety
         pluginClass: SwiftAzureSpeechRecognitionPlugin
 
   # To add assets to your plugin package, add an assets section, like this:

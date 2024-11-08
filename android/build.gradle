@@ -1,4 +1,4 @@
-// group 'com.bsoloss.azure_speech_plugin'
+group 'com.bsoloss.azure_speech_recognition_null_safety'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 33
-    namespace = "com.bsoloss.azure_speech_plugin"
+    namespace = "com.bsoloss.azure_speech_recognition_null_safety"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
