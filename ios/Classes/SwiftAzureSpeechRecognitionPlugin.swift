@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 import MicrosoftCognitiveServicesSpeech
 import AVFoundation
+import Foundation
 
 
 @available(iOS 13.0, *)
@@ -15,6 +16,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
     var azureChannel: FlutterMethodChannel
     var continousListeningStarted: Bool = false
     var continousSpeechRecognizer: SPXSpeechRecognizer? = nil
+    var continousSpeechTranslationRecognizer: SPXTranslationRecognizer? = nil
     var simpleRecognitionTasks: Dictionary<String, SimpleRecognitionTask> = [:]
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -224,7 +226,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
         if (continousListeningStarted) {
             print("Stopping continous recognition")
             do {
-                try continousSpeechRecognizer!.stopContinuousRecognition()
+                try continousSpeechTranslationRecognizer!.stopContinuousRecognition()
                 self.azureChannel.invokeMethod("speech.onRecognitionStopped", arguments: nil)
                 continousSpeechRecognizer = nil
                 continousListeningStarted = false
@@ -240,7 +242,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
         if (continousListeningStarted) {
             print("Stopping continous recognition")
             do {
-                try continousSpeechRecognizer!.stopContinuousRecognition()
+                try continousSpeechTranslationRecognizer!.stopContinuousRecognition()
                 self.azureChannel.invokeMethod("speech.onRecognitionStopped", arguments: nil)
                 continousSpeechRecognizer = nil
                 continousListeningStarted = false
@@ -262,25 +264,79 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 print("An unexpected error occurred")
             }
             
-            let speechConfig = try! SPXSpeechConfiguration(authorizationToken: speechSubscriptionKey, region: serviceRegion)
+            let speechConfig = try! SPXSpeechTranslationConfiguration(authorizationToken: speechSubscriptionKey, region: serviceRegion)
             
             speechConfig.speechRecognitionLanguage = lang
             
+            speechConfig.addTargetLanguage("en-US")
+            speechConfig.addTargetLanguage("zh-CN")
+            speechConfig.addTargetLanguage("zh-HK")
+            speechConfig.addTargetLanguage("ar-SA")
+            speechConfig.addTargetLanguage("es-ES")
+            speechConfig.addTargetLanguage("ru-RU")
+            speechConfig.addTargetLanguage("th-TH")
+            speechConfig.addTargetLanguage("vi-VN")
+            speechConfig.addTargetLanguage("fil-PH")
+            speechConfig.addTargetLanguage("fr-FR")
+            speechConfig.addTargetLanguage("de-DE")
+            speechConfig.addTargetLanguage("ja-JP")
+            speechConfig.addTargetLanguage("ko-KR")
+            speechConfig.addTargetLanguage("id-ID")
+            speechConfig.addTargetLanguage("ms-MY")
+            speechConfig.addTargetLanguage("pt-PT")
+
             let audioConfig = SPXAudioConfiguration()
             
-            continousSpeechRecognizer = try! SPXSpeechRecognizer(speechConfiguration: speechConfig, audioConfiguration: audioConfig)
-            continousSpeechRecognizer!.addRecognizingEventHandler() {reco, evt in
-                print("intermediate recognition result: \(evt.result.text ?? "(no result)")")
-                self.azureChannel.invokeMethod("speech.onSpeech", arguments: evt.result.text)
+            continousSpeechTranslationRecognizer = try! SPXTranslationRecognizer(
+                speechTranslationConfiguration: speechConfig, audioConfiguration: audioConfig)
+            continousSpeechTranslationRecognizer!.addRecognizingEventHandler() {reco, evt in
+                let res = evt.result.text
+                print("intermediate result \(res!)")
+                let translations = evt.result.translations;
+                let resultMap: [String: Any] = [
+                    "text": res,
+                    "translations": translations
+                ]
+                do{
+                    let jsonData = try JSONSerialization.data(withJSONObject: resultMap, options: [])
+                    
+                    // Convert JSON data to a string (force unwrap since we assume it's valid)
+                    let jsonString = String(data: jsonData, encoding: .utf8)!
+                    DispatchQueue.main.async {
+                        self.azureChannel.invokeMethod("speech.onSpeech", arguments: jsonString)
+                       }
+                }catch{
+                    print("Failed to serialize JSON: \(error.localizedDescription)")
+                }
             }
-            continousSpeechRecognizer!.addRecognizedEventHandler({reco, evt in
+            continousSpeechTranslationRecognizer!.addRecognizedEventHandler({reco, evt in
                 let res = evt.result.text
                 print("final result \(res!)")
-                self.azureChannel.invokeMethod("speech.onFinalResponse", arguments: res)
+                let translations = evt.result.translations;
+                let resultMap: [String: Any] = [
+                    "text": res,
+                    "translations": translations
+                ]
+                do{
+                    let jsonData = try JSONSerialization.data(withJSONObject: resultMap, options: [])
+                    
+                    // Convert JSON data to a string (force unwrap since we assume it's valid)
+                    let jsonString = String(data: jsonData, encoding: .utf8)!
+                    DispatchQueue.main.async {
+                        self.azureChannel.invokeMethod("speech.onFinalResponse", arguments: jsonString)
+                       }
+                }catch{
+                    print("Failed to serialize JSON: \(error.localizedDescription)")
+                }
+            
+               
             })
             print("Listening...")
-            try! continousSpeechRecognizer!.startContinuousRecognition()
-            self.azureChannel.invokeMethod("speech.onRecognitionStarted", arguments: nil)
+            try! continousSpeechTranslationRecognizer!.startContinuousRecognition()
+            DispatchQueue.main.async {
+                self.azureChannel.invokeMethod("speech.onRecognitionStarted", arguments: nil)
+               }
+            
             continousListeningStarted = true
         }
     }

@@ -4,7 +4,7 @@ PODS:
     - MicrosoftCognitiveServicesSpeech-iOS (~> 1.29.0)
   - Flutter (1.0.0)
   - MicrosoftCognitiveServicesSpeech-iOS (1.29.0)
-  - permission_handler_apple (9.0.4):
+  - permission_handler_apple (9.1.1):
     - Flutter
 
 DEPENDENCIES:
@@ -28,7 +28,7 @@ SPEC CHECKSUMS:
   azure_speech_recognition_null_safety: 9eddd6816b8063c99a3fea9f479024774621f8fd
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   MicrosoftCognitiveServicesSpeech-iOS: 0de20a8ebb6bbd87decaeaa9a707dd40830106a6
-  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
 
 PODFILE CHECKSUM: aa9af445d1dca55a9a79485169040a812cb9c7e2
 

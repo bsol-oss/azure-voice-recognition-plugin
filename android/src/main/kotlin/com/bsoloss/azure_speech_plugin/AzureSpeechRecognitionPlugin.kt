@@ -1,4 +1,4 @@
-package com.bregant.azure_speech_recognition
+package com.bsoloss.azure_speech_plugin
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -11,7 +11,7 @@ import com.microsoft.cognitiveservices.speech.audio.AudioConfig
 import com.microsoft.cognitiveservices.speech.intent.LanguageUnderstandingModel
 import com.microsoft.cognitiveservices.speech.intent.IntentRecognitionResult
 import com.microsoft.cognitiveservices.speech.intent.IntentRecognizer
-import com.bregant.azure_speech_recognition.MicrophoneStream
+import com.bsoloss.azure_speech_plugin.MicrophoneStream
 import android.app.Activity
 
 import java.util.concurrent.ExecutorService
@@ -27,7 +27,11 @@ import java.io.InputStream
 import java.net.URI
 import android.util.Log
 import android.text.TextUtils
+import com.google.gson.Gson
 import com.microsoft.cognitiveservices.speech.*
+import com.microsoft.cognitiveservices.speech.translation.SpeechTranslationConfig
+import com.microsoft.cognitiveservices.speech.translation.TranslationRecognitionResult
+import com.microsoft.cognitiveservices.speech.translation.TranslationRecognizer
 
 import java.util.concurrent.Semaphore
 
@@ -38,7 +42,9 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
     private lateinit var handler: Handler
     var continuousListeningStarted: Boolean = false
     lateinit var reco: SpeechRecognizer
+    lateinit var reco2: TranslationRecognizer
     lateinit var task_global: Future<SpeechRecognitionResult>
+    lateinit var task_global2: Future<TranslationRecognitionResult>
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         azureChannel = MethodChannel(
@@ -283,16 +289,16 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
     ) {
         val logTag: String = "micStreamContinuous"
 
-        Log.i(logTag, "Continuous recognition started: $continuousListeningStarted")
+        Log.i(logTag, "-->Continuous recognition started: $continuousListeningStarted")
 
         if (continuousListeningStarted) {
-            val _task1 = reco.stopContinuousRecognitionAsync()
+            val _task1 = reco2.stopContinuousRecognitionAsync()
 
             setOnTaskCompletedListener(_task1) { result ->
                 Log.i(logTag, "Continuous recognition stopped.")
                 continuousListeningStarted = false
                 invokeMethod("speech.onRecognitionStopped", null)
-                reco.close()
+                reco2.close()
             }
             return
         }
@@ -300,26 +306,46 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
         try {
             val audioConfig: AudioConfig = AudioConfig.fromDefaultMicrophoneInput()
 
-            val config: SpeechConfig =
-                SpeechConfig.fromAuthorizationToken(authorizationToken, serviceRegion)
+            val config: SpeechTranslationConfig =
+                SpeechTranslationConfig.fromAuthorizationToken(authorizationToken, serviceRegion)
 
+            // Set the source language and target languages for translation
+            Log.i(logTag, "config.speechRecognitionLanguage: $lang")
             config.speechRecognitionLanguage = lang
-
-            reco = SpeechRecognizer(config, audioConfig)
-
-            reco.recognizing.addEventListener { _, speechRecognitionResultEventArgs ->
-                val s = speechRecognitionResultEventArgs.result.text
-                Log.i(logTag, "Intermediate result received: $s")
-                invokeMethod("speech.onSpeech", s)
+            val toLanguages: List<String> = listOf("pt-PT","ms-MY","id-ID","ko-KR","ja-JP","de-DE","fr-FR","fil-PH","vi-VN","th-TH","ru-RU","es-ES","ar-SA","zh-HK", "zh-CN","en-US")
+            toLanguages.forEach { targetLang ->
+                config.addTargetLanguage(targetLang)
             }
 
-            reco.recognized.addEventListener { _, speechRecognitionResultEventArgs ->
+
+            reco2 = TranslationRecognizer(config, audioConfig)
+
+            reco2.recognizing.addEventListener { _, speechRecognitionResultEventArgs ->
                 val s = speechRecognitionResultEventArgs.result.text
-                Log.i(logTag, "Final result received: $s")
-                invokeMethod("speech.onFinalResponse", s)
+                val translations = speechRecognitionResultEventArgs.result.translations
+                val resultMap: Map<String, Any> = mapOf(
+                    "text" to s,
+                    "translations" to translations.mapValues { it.value } // Convert MutableMap to Map<String, String>
+                )
+                val jsonString = Gson().toJson(resultMap)
+                Log.i(logTag, "Intermediate result received: $jsonString")
+
+                invokeMethod("speech.onSpeech", jsonString)
             }
 
-            val _task2 = reco.startContinuousRecognitionAsync()
+            reco2.recognized.addEventListener { _, speechRecognitionResultEventArgs ->
+                val s = speechRecognitionResultEventArgs.result.text
+                val translations = speechRecognitionResultEventArgs.result.translations
+                val resultMap: Map<String, Any> = mapOf(
+                    "text" to s,
+                    "translations" to translations.mapValues { it.value } // Convert MutableMap to Map<String, String>
+                )
+                val jsonString = Gson().toJson(resultMap)
+                Log.i(logTag, "Final result received: $jsonString")
+                invokeMethod("speech.onFinalResponse", jsonString)
+            }
+
+            val _task2 = reco2.startContinuousRecognitionAsync()
 
             setOnTaskCompletedListener(_task2) {
                 continuousListeningStarted = true
@@ -337,13 +363,13 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
         Log.i(logTag, "Continuous recognition started: $continuousListeningStarted")
 
         if (continuousListeningStarted) {
-            val _task1 = reco.stopContinuousRecognitionAsync()
+            val _task1 = reco2.stopContinuousRecognitionAsync()
 
             setOnTaskCompletedListener(_task1) { result ->
                 Log.i(logTag, "Continuous recognition stopped.")
                 continuousListeningStarted = false
                 invokeMethod("speech.onRecognitionStopped", null)
-                reco.close()
+                reco2.close()
                 flutterResult.success(true)
             }
             return
