@@ -1,4 +1,3 @@
-group 'com.bsoloss.azure_speech_recognition_null_safety'
 version '1.0-SNAPSHOT'
 
 buildscript {
