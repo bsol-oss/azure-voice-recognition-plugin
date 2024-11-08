@@ -1,4 +1,4 @@
-package com.bsoloss.azure_speech_plugin
+package com.bsoloss.azure_speech_recognition_null_safety
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
