@@ -1,6 +1,6 @@
 # azure_speech_recognition_example
 
-Demonstrates how to use the azure_speech_recognition plugin.
+Demonstrates how to use the azure_speech_recognition_null_safety plugin.
 
 ## Getting Started
 

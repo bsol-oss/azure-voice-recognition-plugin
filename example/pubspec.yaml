@@ -1,5 +1,5 @@
 name: azure_speech_recognition_null_safety_example
-description: Demonstrates how to use the azure_speech_recognition plugin.
+description: Demonstrates how to use the azure_speech_recognition_null_safety plugin.
 publish_to: 'none'
 version: 1.0.0+9
 

@@ -6,7 +6,7 @@ typedef void StringResultHandler(String text);
 
 class AzureSpeechRecognition {
   static const MethodChannel _channel =
-      const MethodChannel('azure_speech_recognition');
+      const MethodChannel('azure_speech_recognition_null_safety');
 
   static final AzureSpeechRecognition _azureSpeechRecognition =
       new AzureSpeechRecognition._internal();

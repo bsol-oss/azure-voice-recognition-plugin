@@ -48,7 +48,7 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         azureChannel = MethodChannel(
-            flutterPluginBinding.getFlutterEngine().getDartExecutor(), "azure_speech_recognition"
+            flutterPluginBinding.getFlutterEngine().getDartExecutor(), "azure_speech_recognition_null_safety"
         )
         azureChannel.setMethodCallHandler(this)
 
@@ -56,9 +56,9 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
 
     init {
         fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "azure_speech_recognition")
+            val channel = MethodChannel(registrar.messenger(), "azure_speech_recognition_null_safety")
 
-            this.azureChannel = MethodChannel(registrar.messenger(), "azure_speech_recognition")
+            this.azureChannel = MethodChannel(registrar.messenger(), "azure_speech_recognition_null_safety")
             this.azureChannel.setMethodCallHandler(this)
         }
 

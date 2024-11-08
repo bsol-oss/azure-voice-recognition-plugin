@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('azure_speech_recognition');
+  const MethodChannel channel = MethodChannel('azure_speech_recognition_null_safety');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 

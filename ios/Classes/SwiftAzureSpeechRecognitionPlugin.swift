@@ -20,7 +20,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
     var simpleRecognitionTasks: Dictionary<String, SimpleRecognitionTask> = [:]
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "azure_speech_recognition", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "azure_speech_recognition_null_safety", binaryMessenger: registrar.messenger())
         let instance: SwiftAzureSpeechRecognitionPlugin = SwiftAzureSpeechRecognitionPlugin(azureChannel: channel)
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
