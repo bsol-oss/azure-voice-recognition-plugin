@@ -11,7 +11,7 @@ import com.microsoft.cognitiveservices.speech.audio.AudioConfig
 import com.microsoft.cognitiveservices.speech.intent.LanguageUnderstandingModel
 import com.microsoft.cognitiveservices.speech.intent.IntentRecognitionResult
 import com.microsoft.cognitiveservices.speech.intent.IntentRecognizer
-import com.bsoloss.azure_speech_plugin.MicrophoneStream
+import com.bsoloss.azure_speech_recognition_null_safety.MicrophoneStream
 import android.app.Activity
 
 import java.util.concurrent.ExecutorService
