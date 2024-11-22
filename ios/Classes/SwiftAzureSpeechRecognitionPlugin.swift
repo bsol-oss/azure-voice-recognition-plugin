@@ -287,8 +287,12 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
 
             let audioConfig = SPXAudioConfiguration()
             
-            continousSpeechTranslationRecognizer = try! SPXTranslationRecognizer(
+            continousSpeechTranslationRecognizer = try? SPXTranslationRecognizer(
                 speechTranslationConfiguration: speechConfig, audioConfiguration: audioConfig)
+            if(continousSpeechTranslationRecognizer == nil){
+                print("Error occurred starting continuous recognition")
+                return;
+            }
             continousSpeechTranslationRecognizer!.addRecognizingEventHandler() {reco, evt in
                 let res = evt.result.text
                 print("intermediate result \(res!)")
