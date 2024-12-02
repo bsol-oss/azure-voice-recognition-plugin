@@ -370,6 +370,7 @@ class AzureSpeechRecognitionPlugin : FlutterPlugin, Activity(), MethodCallHandle
                 continuousListeningStarted = false
                 invokeMethod("speech.onRecognitionStopped", null)
                 reco2.close()
+                Log.i(logTag, "Continuous recognition closed.")
                 flutterResult.success(true)
             }
             return
