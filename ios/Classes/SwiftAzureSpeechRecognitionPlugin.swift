@@ -230,7 +230,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 try continousSpeechTranslationRecognizer!.stopContinuousRecognition()
                 self.azureChannel.invokeMethod("speech.onRecognitionStopped", arguments: nil)
                 continousSpeechRecognizer = nil
-                continousSpeechTranslationRecognizer= nil
+                continousSpeechTranslationRecognizer = nil
                 continousListeningStarted = false
                 flutterResult(true)
                 print("Disposed azure init")
@@ -248,7 +248,7 @@ public class SwiftAzureSpeechRecognitionPlugin: NSObject, FlutterPlugin {
                 try continousSpeechTranslationRecognizer!.stopContinuousRecognition()
                 self.azureChannel.invokeMethod("speech.onRecognitionStopped", arguments: nil)
                 continousSpeechRecognizer = nil
-                continousSpeechTranslationRecognizer= nil
+                continousSpeechTranslationRecognizer = nil
                 continousListeningStarted = false
             }
             catch {
