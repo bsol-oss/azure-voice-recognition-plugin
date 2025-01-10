@@ -4,7 +4,6 @@ import 'package:azure_speech_recognition_null_safety_example/screens/home_screen
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
   // await dotenv.load();
